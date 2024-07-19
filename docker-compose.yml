@@ -3,7 +3,6 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql_db
-    # restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_DATABASE: db_permission
@@ -13,3 +12,22 @@ services:
       - ./mysql:/var/lib/mysql
     ports:
       - "3307:3306"
+
+  app:
+    image: node:14
+    container_name: nestjs_app
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3307
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=admin
+      - DATABASE_NAME=db_permission
+      - PORT=3000
+    command: sh -c "npm install && npm run start:dev"
+    depends_on:
+      - mysql
