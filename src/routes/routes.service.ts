@@ -13,11 +13,12 @@ export class RoutesService {
   ) {}
 
   async create(createRouteDto: CreateRouteDto) {
-    return 'This action adds a new route';
+    const newModule = this.routeRepository.create(createRouteDto);
+    return await this.routeRepository.save(newModule);
   }
 
   async findAll() {
-    return await this.routeRepository.find()
+    return await this.routeRepository.find();
   }
 
   async findOne(id: number) {
